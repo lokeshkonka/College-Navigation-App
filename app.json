@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "College Navigation App",
+    "slug": "college-navigation-app",
+    "scheme": "college-nav",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/app-icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#f8f9fb"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "android": {
+      "package": "com.anonymous.collegenavigationapp"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "8c687c5f-170b-4fae-b8ba-03cc6eb0fe7e"
+      }
+    },
+    "owner": "loki123123"
+  }
+}

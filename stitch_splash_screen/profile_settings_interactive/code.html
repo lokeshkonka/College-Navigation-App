@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8f9fb;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .clay-card {
+            background: #ffffff;
+            box-shadow: 0px 20px 40px rgba(43, 52, 56, 0.06), 
+                        inset 4px 4px 8px rgba(255, 255, 255, 0.8),
+                        inset -4px -4px 10px rgba(221, 228, 230, 0.5);
+        }
+        .clay-inset {
+            background: #eaeef2;
+            box-shadow: inset 2px 2px 4px rgba(43, 52, 56, 0.1);
+        }
+        .clay-button-primary {
+            background: linear-gradient(180deg, #586062 0%, #4c5456 100%);
+            box-shadow: 0px 10px 20px rgba(88, 96, 98, 0.2);
+        }
+        .clay-avatar-container {
+            background: #ffffff;
+            box-shadow: 0px 15px 30px rgba(43, 52, 56, 0.08), 
+                        inset 6px 6px 12px rgba(255, 255, 255, 1),
+                        inset -6px -6px 15px rgba(221, 228, 230, 0.6);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "tertiary-dim": "#005f4b",
+                "primary-container": "#dde4e6",
+                "on-primary-fixed-variant": "#565d5f",
+                "inverse-surface": "#0c0f10",
+                "primary-dim": "#4c5456",
+                "outline": "#737c81",
+                "secondary-fixed": "#d9e4e9",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-fixed": "#364145",
+                "surface-dim": "#d1dce2",
+                "on-tertiary-fixed": "#004b3a",
+                "secondary": "#566165",
+                "tertiary": "#006c56",
+                "error-container": "#fe8983",
+                "on-primary-container": "#4c5355",
+                "on-tertiary-fixed-variant": "#006a54",
+                "surface": "#f8f9fb",
+                "on-primary": "#f2f9fb",
+                "on-error-container": "#752121",
+                "background": "#f8f9fb",
+                "on-secondary-container": "#495357",
+                "surface-bright": "#f8f9fb",
+                "outline-variant": "#aab3b9",
+                "primary": "#586062",
+                "inverse-on-surface": "#9b9d9f",
+                "on-primary-fixed": "#394043",
+                "tertiary-fixed-dim": "#60eec7",
+                "surface-container": "#eaeef2",
+                "on-surface-variant": "#586065",
+                "tertiary-container": "#70fdd5",
+                "error": "#9f403d",
+                "secondary-fixed-dim": "#cbd6db",
+                "on-surface": "#2b3438",
+                "on-tertiary-container": "#005f4b",
+                "on-tertiary": "#e4fff3",
+                "surface-tint": "#586062",
+                "inverse-primary": "#f1f8fa",
+                "primary-fixed": "#dde4e6",
+                "surface-variant": "#dbe4ea",
+                "error-dim": "#4e0309",
+                "surface-container-highest": "#dbe4ea",
+                "on-error": "#fff7f6",
+                "surface-container-low": "#f1f4f7",
+                "on-secondary": "#f0fbff",
+                "primary-fixed-dim": "#cfd6d8",
+                "on-secondary-fixed-variant": "#525d61",
+                "secondary-dim": "#4a5559",
+                "tertiary-fixed": "#70fdd5",
+                "on-background": "#2b3438",
+                "surface-container-high": "#e2e9ee",
+                "secondary-container": "#d9e4e9"
+              },
+              fontFamily: {
+                "headline": ["Plus Jakarta Sans"],
+                "body": ["Plus Jakarta Sans"],
+                "label": ["Plus Jakarta Sans"]
+              },
+              borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-6 py-4 bg-[#f8f9fb]/70 dark:bg-slate-900/70 backdrop-blur-xl shadow-[0px_20px_40px_rgba(0,0,0,0.06)] inner-shadow-white rounded-b-[2rem]">
+<div class="flex items-center gap-4">
+<button class="text-[#586062] dark:text-slate-300 active:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="text-[#586062] dark:text-slate-100 font-extrabold tracking-tighter text-lg font-['Plus_Jakarta_Sans']">Tactile Cartographer</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-surface-container-highest">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a stylish young man with a friendly expression in a sunlit outdoor urban setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAi--hJMpQCsXVW01q6kdGOo8Ho-kA0kVp3lkOmCu3ZFnOPsSr5h8npMJpLkSNvJc_GasRddbiS27kuI3cYWVXvCO0Y_LJe6iyMwRKuUISIWwnSIjArWRV2NaqIx32sbsYRctUxYSe1DLfgZ4xM-CwrLEeEO2AeNE8sY-xHQDP5S8mrpdf2F_n5ulAzN_pbm6K14zDra0PrFfJHuxufG-xl0-7xPY42PgsnIWKtglTi39kIzhz8QxcI06JUmM0IfwSzLYncvB13fHoc"/>
+</div>
+</header>
+<main class="pt-28 px-6 max-w-2xl mx-auto space-y-10">
+<!-- Profile Header Section -->
+<section class="flex flex-col items-center space-y-4">
+<div class="clay-avatar-container w-32 h-32 rounded-full p-2 flex items-center justify-center relative">
+<div class="w-full h-full rounded-full overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="High-end studio portrait of a young adult with soft natural lighting and a minimalist background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBu84mPJFRvjcRJZIUORd6O3KxWxuuTg10bIYUk3EDdZrbrF49Nx9GD7Rjy_frCmp4gQruvEb-1wiLcbUbFHU1kO-g1bbcoX3C4oZm35PmsVf7xH1Tjf3F5nUJofgOc1U4cyIMe5LcDSgjet257OBItdMmLdZejvk4b0LW5oewqFf68tGTM4wrS8b0eAf5nQc8T3DS6efkYG-phi5jLOdnHMiizz5rAJu5_v4wZ6WD1YKZ68pI871D6CxAqtD2-6ru4K123oOAFf1bQ"/>
+</div>
+<button class="absolute bottom-1 right-1 bg-tertiary text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+</button>
+</div>
+<div class="text-center">
+<h2 class="text-2xl font-extrabold tracking-tight text-on-surface">Alex Sterling</h2>
+<p class="text-on-surface-variant font-medium text-sm">Graduate Student • Architecture</p>
+</div>
+</section>
+<!-- Bento Grid Settings -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Dark Mode Toggle Card -->
+<div class="clay-card rounded-lg p-6 flex flex-col justify-between space-y-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 clay-inset rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="dark_mode">dark_mode</span>
+</div>
+<span class="font-bold text-on-surface">Dark Mode</span>
+</div>
+<!-- Tactile Toggle -->
+<div class="w-14 h-8 clay-inset rounded-full p-1 relative flex items-center">
+<div class="w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center">
+<!-- Knob -->
+</div>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">Switch to a darker interface for low-light campus walking.</p>
+</div>
+<!-- Accessibility Card -->
+<div class="clay-card rounded-lg p-6 flex flex-col justify-between space-y-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 clay-inset rounded-full flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="accessibility_new">accessibility_new</span>
+</div>
+<span class="font-bold text-on-surface">Accessibility</span>
+</div>
+<!-- Tactile Toggle Active -->
+<div class="w-14 h-8 bg-tertiary/20 rounded-full p-1 relative flex items-center justify-end">
+<div class="w-6 h-6 bg-tertiary rounded-full shadow-lg flex items-center justify-center">
+<!-- Knob -->
+</div>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">Enable high-contrast markers and wheelchair-accessible routing.</p>
+</div>
+<!-- Detailed Settings List Card -->
+<div class="clay-card rounded-lg p-6 md:col-span-2 space-y-6">
+<h3 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Preferences &amp; Privacy</h3>
+<div class="space-y-4">
+<!-- Item 1 -->
+<button class="w-full flex items-center justify-between p-4 rounded-xl hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" data-icon="notifications">notifications</span>
+<div class="text-left">
+<p class="font-bold text-on-surface">Notifications</p>
+<p class="text-xs text-on-surface-variant">Arrival alerts and route changes</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Item 2 -->
+<button class="w-full flex items-center justify-between p-4 rounded-xl hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" data-icon="location_on">location_on</span>
+<div class="text-left">
+<p class="font-bold text-on-surface">Location History</p>
+<p class="text-xs text-on-surface-variant">Manage your saved frequent spots</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Item 3 -->
+<button class="w-full flex items-center justify-between p-4 rounded-xl hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" data-icon="security">security</span>
+<div class="text-left">
+<p class="font-bold text-on-surface">Security</p>
+<p class="text-xs text-on-surface-variant">Two-factor and login history</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Feedback Card -->
+<a class="clay-card rounded-lg p-6 flex flex-col items-center justify-center space-y-3 text-center active:scale-95 transition-all md:col-span-1 border-2 border-transparent active:border-tertiary-dim/10 block" href="{{DATA:SCREEN:SCREEN_2}}">
+<div class="w-12 h-12 clay-inset rounded-full flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-3xl" data-icon="chat_bubble">chat_bubble</span>
+</div>
+<div>
+<span class="font-bold text-on-surface block">Send Feedback</span>
+<span class="text-xs text-on-surface-variant">Help us improve the map</span>
+</div>
+</a>
+<!-- Logout Card -->
+<button class="clay-card rounded-lg p-6 flex flex-col items-center justify-center space-y-3 text-center active:scale-95 transition-all md:col-span-1">
+<div class="w-12 h-12 clay-inset rounded-full flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-3xl" data-icon="logout">logout</span>
+</div>
+<div>
+<span class="font-bold text-on-surface block">Sign Out</span>
+<span class="text-xs text-on-surface-variant">Securely exit your session</span>
+</div>
+</button>
+</section>
+<!-- App Branding / Footer -->
+<footer class="py-10 text-center space-y-2 opacity-40">
+<p class="font-bold text-sm tracking-widest uppercase">Tactile Cartographer v2.4.1</p>
+<p class="text-xs">Crafted with precision for campus explorers</p>
+</footer>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 px-8 pb-8 flex justify-around items-center bg-[#ffffff]/80 dark:bg-slate-900/80 backdrop-blur-2xl">
+<div class="fixed bottom-6 left-6 right-6 rounded-[2.5rem] shadow-[0px_20px_40px_rgba(0,0,0,0.08)] shadow-[inset_4px_4px_8px_rgba(255,255,255,0.8)] bg-white/90 flex justify-around items-center h-20 px-4">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-[#586062] dark:text-slate-400 opacity-60 hover:opacity-100 transition-opacity active:scale-90 transition-transform duration-300" href="{{DATA:SCREEN:SCREEN_4}}">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold uppercase tracking-wider mt-1">Home</span>
+</a>
+<!-- Map -->
+<a class="flex flex-col items-center justify-center text-[#586062] dark:text-slate-400 opacity-60 hover:opacity-100 transition-opacity active:scale-90 transition-transform duration-300" href="{{DATA:SCREEN:SCREEN_10}}">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold uppercase tracking-wider mt-1">Map</span>
+</a>
+<!-- Profile (Active) -->
+<a class="flex flex-col items-center justify-center bg-[#006c56] text-white rounded-full w-14 h-14 shadow-lg active:scale-90 transition-transform duration-300" href="{{DATA:SCREEN:SCREEN_7}}">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="hidden">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>
