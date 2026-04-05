@@ -1,9 +1,10 @@
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { Button } from '@/components/ui/Button';
 import { ClayCard } from '@/components/ui/ClayCard';
-import { ClaySunkenInput } from '@/components/ui/ClaySunkenInput';
+import { TextInput } from '@/components/ui/TextInput';
 import { signUp } from '@/features/auth/api/authApi';
 import { theme } from '@/lib/constants/theme';
 
@@ -14,8 +15,16 @@ export default function SignUpScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [info, setInfo] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const canSubmit = fullName.trim().length > 0 && email.trim().length > 0 && password.length > 0 && !loading;
 
   const onSubmit = async () => {
+    if (!fullName.trim() || !email.trim() || !password) {
+      setError('All fields are required.');
+      return;
+    }
+
     setLoading(true);
     setError('');
     setInfo('');
@@ -23,7 +32,9 @@ export default function SignUpScreen() {
       const result = await signUp(email.trim(), password, fullName.trim());
       if (result.needsEmailConfirmation) {
         setInfo('Account created. Please confirm your email, then sign in.');
-        router.replace('/(auth)/sign-in');
+        setTimeout(() => {
+          router.replace('/(auth)/sign-in');
+        }, 2000);
         return;
       }
 
@@ -36,97 +47,242 @@ export default function SignUpScreen() {
   };
 
   return (
-    <View style={styles.root}>
-      <ClayCard style={styles.card}>
-        <Text style={styles.title}>Create Account</Text>
-        <Text style={styles.subtitle}>Set up your college navigation profile</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.root}
+    >
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.container}>
+          {/* Hero Section */}
+          <View style={styles.heroSection}>
+            <View style={styles.logoContainer}>
+              <View style={styles.logoPlaceholder}>
+                <Text style={styles.logoIcon}>🧭</Text>
+              </View>
+            </View>
+            <Text style={styles.heroTitle}>Get Started</Text>
+            <Text style={styles.heroSubtitle}>
+              Create your account and start navigating campus like a pro
+            </Text>
+          </View>
 
-        <ClaySunkenInput
-          accessibilityLabel="Full Name"
-          onChangeText={setFullName}
-          placeholder="Full Name"
-          style={styles.input}
-          value={fullName}
-        />
-        <ClaySunkenInput
-          accessibilityLabel="Email"
-          autoCapitalize="none"
-          keyboardType="email-address"
-          onChangeText={setEmail}
-          placeholder="Email"
-          style={styles.input}
-          value={email}
-        />
-        <ClaySunkenInput
-          accessibilityLabel="Password"
-          onChangeText={setPassword}
-          placeholder="Password"
-          secureTextEntry
-          style={styles.input}
-          value={password}
-        />
+          {/* Form Card */}
+          <ClayCard style={styles.formCard}>
+            <TextInput
+              value={fullName}
+              onChangeText={setFullName}
+              placeholder="Full Name"
+              label="Full Name"
+              autoCapitalize="words"
+              leftIcon="person"
+              accessibilityLabel="Full Name"
+              style={styles.input}
+            />
 
-        {error.length > 0 ? <Text style={styles.error}>{error}</Text> : null}
-        {info.length > 0 ? <Text style={styles.info}>{info}</Text> : null}
+            <TextInput
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Email"
+              label="Email Address"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              leftIcon="email"
+              accessibilityLabel="Email"
+              style={styles.input}
+            />
 
-        <Pressable onPress={onSubmit} style={styles.primaryButton}>
-          <Text style={styles.primaryButtonText}>{loading ? 'Creating account...' : 'Create Account'}</Text>
-        </Pressable>
+            <TextInput
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Password"
+              label="Password"
+              secureTextEntry={!showPassword}
+              leftIcon="lock"
+              rightIcon={showPassword ? 'visibility' : 'visibility-off'}
+              onRightIconPress={() => setShowPassword(!showPassword)}
+              accessibilityLabel="Password"
+              style={styles.input}
+            />
 
-        <Link href="/(auth)/sign-in" style={styles.link}>
-          Already have an account? Sign in
-        </Link>
-      </ClayCard>
-    </View>
+            {/* Password requirements */}
+            <View style={styles.passwordHint}>
+              <Text style={styles.passwordHintText}>
+                • Minimum 8 characters
+              </Text>
+            </View>
+
+            {error.length > 0 && (
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{error}</Text>
+              </View>
+            )}
+
+            {info.length > 0 && (
+              <View style={styles.infoContainer}>
+                <Text style={styles.infoText}>{info}</Text>
+              </View>
+            )}
+
+            <Button
+              onPress={onSubmit}
+              variant="tertiary"
+              size="large"
+              disabled={!canSubmit}
+              loading={loading}
+              icon="arrow-forward"
+              iconPosition="right"
+              fullWidth
+              style={styles.primaryButton}
+            >
+              {loading ? 'Creating account...' : 'Create Account'}
+            </Button>
+
+            <View style={styles.divider}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>or</Text>
+              <View style={styles.dividerLine} />
+            </View>
+
+            <Link href="/(auth)/sign-in" asChild>
+              <Button
+                onPress={() => {}}
+                variant="ghost"
+                size="medium"
+                fullWidth
+              >
+                Already have an account? Sign in
+              </Button>
+            </Link>
+          </ClayCard>
+
+          {/* Footer */}
+          <Text style={styles.footerText}>
+            By creating an account, you agree to our Terms of Service and Privacy Policy
+          </Text>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   root: {
-    alignItems: 'center',
-    backgroundColor: theme.colors.background,
     flex: 1,
-    justifyContent: 'center',
-    padding: theme.spacing.section
+    backgroundColor: theme.colors.background
   },
-  card: {
-    width: '100%'
+  scrollContent: {
+    flexGrow: 1
   },
-  title: {
+  container: {
+    flex: 1,
+    paddingHorizontal: theme.spacing.screenPadding,
+    paddingTop: theme.spacing['6xl'],
+    paddingBottom: theme.spacing['3xl']
+  },
+  heroSection: {
+    alignItems: 'center',
+    marginBottom: theme.spacing['4xl']
+  },
+  logoContainer: {
+    marginBottom: theme.spacing['2xl']
+  },
+  logoPlaceholder: {
+    width: 80,
+    height: 80,
+    borderRadius: theme.radii.xl,
+    backgroundColor: theme.colors.tertiaryContainer,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  logoIcon: {
+    fontSize: 40
+  },
+  heroTitle: {
+    fontSize: 32,
+    fontWeight: '800',
     color: theme.colors.primary,
-    fontSize: 28,
-    fontWeight: '900'
+    marginBottom: theme.spacing.sm,
+    letterSpacing: -1
   },
-  subtitle: {
-    color: theme.colors.textMuted,
-    marginTop: 6
+  heroSubtitle: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: theme.colors.onSurfaceVariant,
+    textAlign: 'center',
+    lineHeight: 22,
+    paddingHorizontal: theme.spacing.xl
+  },
+  formCard: {
+    marginBottom: theme.spacing.xl
   },
   input: {
-    marginTop: theme.spacing.md
+    marginBottom: theme.spacing.lg
   },
-  error: {
-    color: theme.colors.danger,
-    marginTop: theme.spacing.md
+  passwordHint: {
+    marginBottom: theme.spacing.lg
   },
-  info: {
-    color: theme.colors.tertiary,
-    marginTop: theme.spacing.sm
+  passwordHintText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: theme.colors.onSurfaceVariant,
+    lineHeight: 18
+  },
+  errorContainer: {
+    backgroundColor: theme.colors.errorContainer,
+    borderRadius: theme.radii.md,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.lg
+  },
+  errorText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: theme.colors.onErrorContainer,
+    lineHeight: 18
+  },
+  infoContainer: {
+    backgroundColor: theme.colors.tertiaryContainer,
+    borderRadius: theme.radii.md,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.lg
+  },
+  infoText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: theme.colors.onTertiaryContainer,
+    lineHeight: 18
   },
   primaryButton: {
+    marginTop: theme.spacing.lg
+  },
+  divider: {
+    flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.tertiary,
-    borderRadius: theme.radii.pill,
-    marginTop: theme.spacing.lg,
-    paddingVertical: theme.spacing.md
+    marginVertical: theme.spacing.xl
   },
-  primaryButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '800'
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: theme.colors.outlineVariant,
+    opacity: 0.3
   },
-  link: {
-    color: theme.colors.primary,
-    marginTop: theme.spacing.lg,
-    textAlign: 'center'
+  dividerText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.outline,
+    marginHorizontal: theme.spacing.md,
+    textTransform: 'uppercase',
+    letterSpacing: 1
+  },
+  footerText: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: theme.colors.outlineVariant,
+    textAlign: 'center',
+    lineHeight: 16,
+    paddingHorizontal: theme.spacing.xl
   }
 });
