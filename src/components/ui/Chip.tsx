@@ -87,7 +87,7 @@ export function Chip({
       onPress={onPress}
       style={({ pressed }: any) => [
         ...getChipStyle(),
-        pressed && onPress && styles.pressed,
+        pressed && onPress ? styles.pressed : undefined,
         style
       ]}
     >

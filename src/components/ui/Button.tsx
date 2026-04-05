@@ -94,7 +94,7 @@ export function Button({
       onPress={onPress}
       style={({ pressed }) => [
         ...getButtonStyle(),
-        pressed && !isDisabled && styles.pressed,
+        pressed && !isDisabled ? styles.pressed : undefined,
         style
       ]}
     >
