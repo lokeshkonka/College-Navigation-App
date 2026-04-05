@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Route Selection | Tactile Cartographer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-dim": "#005f4b",
+                        "primary-container": "#dde4e6",
+                        "on-primary-fixed-variant": "#565d5f",
+                        "inverse-surface": "#0c0f10",
+                        "primary-dim": "#4c5456",
+                        "outline": "#737c81",
+                        "secondary-fixed": "#d9e4e9",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#364145",
+                        "surface-dim": "#d1dce2",
+                        "on-tertiary-fixed": "#004b3a",
+                        "secondary": "#566165",
+                        "tertiary": "#006c56",
+                        "error-container": "#fe8983",
+                        "on-primary-container": "#4c5355",
+                        "on-tertiary-fixed-variant": "#006a54",
+                        "surface": "#f8f9fb",
+                        "on-primary": "#f2f9fb",
+                        "on-error-container": "#752121",
+                        "background": "#f8f9fb",
+                        "on-secondary-container": "#495357",
+                        "surface-bright": "#f8f9fb",
+                        "outline-variant": "#aab3b9",
+                        "primary": "#586062",
+                        "inverse-on-surface": "#9b9d9f",
+                        "on-primary-fixed": "#394043",
+                        "tertiary-fixed-dim": "#60eec7",
+                        "surface-container": "#eaeef2",
+                        "on-surface-variant": "#586065",
+                        "tertiary-container": "#70fdd5",
+                        "error": "#9f403d",
+                        "secondary-fixed-dim": "#cbd6db",
+                        "on-surface": "#2b3438",
+                        "on-tertiary-container": "#005f4b",
+                        "on-tertiary": "#e4fff3",
+                        "surface-tint": "#586062",
+                        "inverse-primary": "#f1f8fa",
+                        "primary-fixed": "#dde4e6",
+                        "surface-variant": "#dbe4ea",
+                        "error-dim": "#4e0309",
+                        "surface-container-highest": "#dbe4ea",
+                        "on-error": "#fff7f6",
+                        "surface-container-low": "#f1f4f7",
+                        "on-secondary": "#f0fbff",
+                        "primary-fixed-dim": "#cfd6d8",
+                        "on-secondary-fixed-variant": "#525d61",
+                        "secondary-dim": "#4a5559",
+                        "tertiary-fixed": "#70fdd5",
+                        "on-background": "#2b3438",
+                        "surface-container-high": "#e2e9ee",
+                        "secondary-container": "#d9e4e9"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .clay-card {
+            background: #ffffff;
+            box-shadow: 0px 20px 40px rgba(43, 52, 56, 0.06), 
+                        inset 4px 4px 8px rgba(255, 255, 255, 0.8), 
+                        inset -4px -4px 10px rgba(221, 228, 230, 0.5);
+        }
+        .clay-sunken {
+            background: #dbe4ea;
+            box-shadow: inset 2px 2px 4px rgba(43, 52, 56, 0.1);
+        }
+        .clay-button {
+            background: linear-gradient(180deg, #586062 0%, #4c5456 100%);
+            box-shadow: 0px 10px 25px rgba(88, 96, 98, 0.3),
+                        inset 2px 2px 4px rgba(255, 255, 255, 0.2);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background font-body text-on-background selection:bg-tertiary/20">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-6 py-4 bg-[#f8f9fb]/70 dark:bg-slate-900/70 backdrop-blur-xl rounded-b-[2rem] shadow-[0px_20px_40px_rgba(0,0,0,0.06)]">
+<div class="flex items-center gap-4">
+<a class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#ffffff] transition-all active:scale-95 duration-200" href="{{DATA:SCREEN:SCREEN_10}}">
+<span class="material-symbols-outlined text-[#586062]">arrow_back</span>
+</a>
+<h1 class="font-['Plus_Jakarta_Sans'] font-extrabold tracking-tighter text-[#586062] text-lg">Tactile Cartographer</h1>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary-container overflow-hidden shadow-sm">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="portrait of a young man with a friendly expression in clean studio lighting with soft shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3jcwLZ-Wx98TEQOQGRl2yEHGZdVmRqnW26i08jBsZ4NoXp8Iukn6GhCmmUBkm3LhnaYzKyJC_SH95iMhQNEIJhkue7GdYb8e__yUs7ma0P2saAT9hImygr2QwAY6Pq5NoTr2EU25-1-AJKxwHHCWo0x11IDYWnJfqfqeMm5oFnhZRv7vXiUqd4dZVmWGqyl8l7V4ARt3heNCSnziTQK6a9RpuLGyfBtpFu4llu4YkQJzf81urzyMRcLGo7ZNLWdNaaoCFoFu8Ic5V"/>
+</div>
+</header>
+<main class="pt-28 pb-32 px-6 max-w-2xl mx-auto space-y-10">
+<!-- Search & Route Input Section -->
+<section class="clay-card p-6 rounded-lg space-y-6">
+<div class="space-y-4">
+<div class="relative">
+<div class="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col items-center gap-1">
+<div class="w-2.5 h-2.5 rounded-full border-2 border-tertiary"></div>
+<div class="w-0.5 h-8 bg-surface-container-highest"></div>
+</div>
+<div class="ml-10">
+<label class="text-[10px] font-bold uppercase tracking-widest text-outline-variant mb-1 block">Current Location</label>
+<div class="clay-sunken px-4 py-3 rounded-md flex items-center justify-between">
+<span class="text-on-surface font-medium">Main Library Entrance</span>
+<span class="material-symbols-outlined text-outline text-sm">my_location</span>
+</div>
+</div>
+</div>
+<div class="relative">
+<div class="absolute left-4 top-1/2 -translate-y-1/2">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<div class="ml-10">
+<label class="text-[10px] font-bold uppercase tracking-widest text-outline-variant mb-1 block">Destination</label>
+<div class="clay-sunken px-4 py-3 rounded-md">
+<span class="text-on-surface font-medium">Science &amp; Engineering Hall</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Route Preview Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Main Map Preview -->
+<div class="md:col-span-2 clay-card p-4 rounded-lg overflow-hidden relative min-h-[240px]">
+<div class="absolute inset-0 z-0">
+<img alt="Map Preview" class="w-full h-full object-cover opacity-80" data-alt="minimalist architectural 3D campus map with soft clay texture buildings and clean green spaces" data-location="Campus Map" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCMRc55Le5rvddsrj4G68vQSF3McvktJ9BhLUP82bw_9TMJ--I0a9ukTN0UZB3oFwFDZs_PTk7QfNsWBmHU0dCpUBd-x1vnjhRS3FzDeZl68cK7l2V-RpPNls28iaPlITVOLBkfUliko-x-i2mtyUn5Ev7xufK4jflgIvboyEtsAnWMrVmdQqczvssR9xkOZ7wcwf1bEnqDVm1WpUuyyTDNY6PfFkcXwTjq_7K90jpvrbkarXFOiAGVv9dZuuGF2AonnHDULo9cMq8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent"></div>
+</div>
+<!-- Floating Info Chip -->
+<div class="relative z-10 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full w-max flex items-center gap-2 shadow-sm">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="text-xs font-bold text-on-surface">Fastest Route Found</span>
+</div>
+</div>
+<!-- Stats Column -->
+<div class="space-y-6">
+<div class="clay-card p-4 rounded-lg flex flex-col items-center justify-center text-center">
+<span class="text-3xl font-extrabold text-tertiary tracking-tighter">8 min</span>
+<span class="text-xs font-bold text-outline-variant uppercase tracking-widest">Duration</span>
+</div>
+<div class="clay-card p-4 rounded-lg flex flex-col items-center justify-center text-center">
+<span class="text-xl font-bold text-primary tracking-tight">650m</span>
+<span class="text-xs font-bold text-outline-variant uppercase tracking-widest">Distance</span>
+</div>
+</div>
+</section>
+<!-- Action Button -->
+<div class="flex justify-center">
+<a class="clay-button group w-full max-w-sm py-5 rounded-full flex items-center justify-center gap-3 active:scale-95 transition-all duration-300" href="{{DATA:SCREEN:SCREEN_10}}">
+<span class="text-white font-bold tracking-tight text-lg">Start Navigation</span>
+<span class="material-symbols-outlined text-white group-hover:translate-x-1 transition-transform">directions_walk</span>
+</a>
+</div>
+<!-- Step-by-Step Directions -->
+<section class="space-y-6">
+<h2 class="text-sm font-bold uppercase tracking-widest text-outline-variant px-2">Journey Breakdown</h2>
+<div class="space-y-4">
+<!-- Step 1 -->
+<div class="clay-card p-5 rounded-lg flex items-start gap-4 hover:translate-x-1 transition-transform duration-300 cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">turn_right</span>
+</div>
+<div>
+<p class="text-on-surface font-bold text-lg leading-tight">Head North towards Arts Plaza</p>
+<p class="text-on-surface-variant text-sm mt-1">Walk for 150m, then take a right at the sculpture.</p>
+<div class="mt-3 flex gap-2">
+<span class="px-3 py-1 bg-tertiary-container/30 text-tertiary-dim text-[10px] font-bold rounded-full uppercase tracking-tighter">Smooth Pavement</span>
+</div>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="clay-card p-5 rounded-lg flex items-start gap-4 hover:translate-x-1 transition-transform duration-300 cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">straight</span>
+</div>
+<div>
+<p class="text-on-surface font-bold text-lg leading-tight">Cross the Central Quad</p>
+<p class="text-on-surface-variant text-sm mt-1">Continue straight through the lawn area.</p>
+<div class="mt-3 flex gap-2">
+<span class="px-3 py-1 bg-secondary-container/50 text-on-secondary-container text-[10px] font-bold rounded-full uppercase tracking-tighter">Heavy Traffic</span>
+</div>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="clay-card p-5 rounded-lg flex items-start gap-4 hover:translate-x-1 transition-transform duration-300 cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">apartment</span>
+</div>
+<div>
+<p class="text-on-surface font-bold text-lg leading-tight">Enter West Wing Gate</p>
+<p class="text-on-surface-variant text-sm mt-1">Science Hall will be on your left after the gate.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 px-8 pb-8 flex justify-around items-center bg-[#ffffff]/80 dark:bg-slate-900/80 backdrop-blur-2xl">
+<div class="flex justify-around items-center w-full max-w-lg bg-white shadow-[0px_20px_40px_rgba(0,0,0,0.08)] shadow-[inset_4px_4px_8px_rgba(255,255,255,0.8)] rounded-[2.5rem] p-4">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-[#586062] opacity-60 hover:opacity-100 transition-opacity active:scale-90 duration-300" href="{{DATA:SCREEN:SCREEN_4}}">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold uppercase tracking-wider mt-1">Home</span>
+</a>
+<!-- Map (Active) -->
+<a class="flex flex-col items-center justify-center bg-[#006c56] text-white rounded-full w-14 h-14 shadow-lg active:scale-90 transition-transform duration-300" href="{{DATA:SCREEN:SCREEN_10}}">
+<span class="material-symbols-outlined" data-icon="map" style="font-variation-settings: 'FILL' 1;">map</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-[#586062] opacity-60 hover:opacity-100 transition-opacity active:scale-90 duration-300" href="{{DATA:SCREEN:SCREEN_7}}">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold uppercase tracking-wider mt-1">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

@@ -48,6 +48,21 @@ export async function signUp(email: string, password: string, fullName: string) 
       logger.warn('Profile bootstrap after sign-up failed', { profileError });
     }
   }
+
+  return {
+    needsEmailConfirmation: !data.session
+  };
+}
+
+export async function resendConfirmationEmail(email: string) {
+  const { error } = await getSupabaseClient().auth.resend({
+    type: 'signup',
+    email
+  });
+
+  if (error) {
+    throw error;
+  }
 }
 
 export async function signOut() {

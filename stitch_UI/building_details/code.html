@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Building Details | Tactile Cartographer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-dim": "#005f4b",
+              "primary-container": "#dde4e6",
+              "on-primary-fixed-variant": "#565d5f",
+              "inverse-surface": "#0c0f10",
+              "primary-dim": "#4c5456",
+              "outline": "#737c81",
+              "secondary-fixed": "#d9e4e9",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-fixed": "#364145",
+              "surface-dim": "#d1dce2",
+              "on-tertiary-fixed": "#004b3a",
+              "secondary": "#566165",
+              "tertiary": "#006c56",
+              "error-container": "#fe8983",
+              "on-primary-container": "#4c5355",
+              "on-tertiary-fixed-variant": "#006a54",
+              "surface": "#f8f9fb",
+              "on-primary": "#f2f9fb",
+              "on-error-container": "#752121",
+              "background": "#f8f9fb",
+              "on-secondary-container": "#495357",
+              "surface-bright": "#f8f9fb",
+              "outline-variant": "#aab3b9",
+              "primary": "#586062",
+              "inverse-on-surface": "#9b9d9f",
+              "on-primary-fixed": "#394043",
+              "tertiary-fixed-dim": "#60eec7",
+              "surface-container": "#eaeef2",
+              "on-surface-variant": "#586065",
+              "tertiary-container": "#70fdd5",
+              "error": "#9f403d",
+              "secondary-fixed-dim": "#cbd6db",
+              "on-surface": "#2b3438",
+              "on-tertiary-container": "#005f4b",
+              "on-tertiary": "#e4fff3",
+              "surface-tint": "#586062",
+              "inverse-primary": "#f1f8fa",
+              "primary-fixed": "#dde4e6",
+              "surface-variant": "#dbe4ea",
+              "error-dim": "#4e0309",
+              "surface-container-highest": "#dbe4ea",
+              "on-error": "#fff7f6",
+              "surface-container-low": "#f1f4f7",
+              "on-secondary": "#f0fbff",
+              "primary-fixed-dim": "#cfd6d8",
+              "on-secondary-fixed-variant": "#525d61",
+              "secondary-dim": "#4a5559",
+              "tertiary-fixed": "#70fdd5",
+              "on-background": "#2b3438",
+              "surface-container-high": "#e2e9ee",
+              "secondary-container": "#d9e4e9"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .clay-card {
+            background: #ffffff;
+            box-shadow: 0px 20px 40px rgba(43, 52, 56, 0.06), 
+                        inset 4px 4px 8px rgba(255, 255, 255, 0.8), 
+                        inset -4px -4px 10px rgba(221, 228, 230, 0.5);
+        }
+        .clay-sunken {
+            background: #dbe4ea;
+            box-shadow: inset 2px 2px 4px rgba(43, 52, 56, 0.1);
+        }
+        .clay-button-active {
+            background: #006c56;
+            box-shadow: 0px 8px 16px rgba(0, 108, 86, 0.2), 
+                        inset 2px 2px 4px rgba(255, 255, 255, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body text-on-surface">
+<!-- Top Navigation Shell (Suppressed for detail view per Task-Focused rule, using Back button instead) -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-6 py-4 bg-[#f8f9fb]/70 backdrop-blur-xl rounded-b-lg">
+<button class="w-12 h-12 flex items-center justify-center clay-card rounded-full active:scale-95 transition-all">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-headline font-bold text-lg tracking-tight text-primary">Tactile Cartographer</h1>
+<div class="w-12 h-12 flex items-center justify-center clay-card rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up portrait of a young male student smiling, soft studio lighting, professional and clean aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIGnGD-VKSoAKtD6EIssxyluY193W02p6jVRK7sxVFqrxbQTvl7RpSQTqV5YtRtqY-gP0nh--Y_7MuQiumlE4gMJGG7T7_FcmbRAszhumLnoeJzq4L9C80VhJYl_LLjbYYRB8k9zUoXpRNqF6nItjkQVAk_KONdQwzQFqbhS75cz1s2iKSaM6oB0N2ZxCQv2M9tM7Kxsi4fN0RuYoaHBVQwQ3b9Fom1QT_2STcgdf0sApYicVRYwWTnnSSmPYqu8-Bf8SxsRFuVAw-"/>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-4xl mx-auto space-y-8">
+<!-- Hero Building Header -->
+<section class="clay-card p-8 rounded-xl flex flex-col md:flex-row gap-8 items-center">
+<div class="w-full md:w-1/2 aspect-[4/3] rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Modern architectural glass university building with geometric shapes and soft sunlight reflections on concrete surfaces" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5nLMbc_sytAHeklbp6X0ojbRwocsaV3WWNZm8DFj8D_xn3JXi3vMaa5cMNTKuvLlf7F6zRdDJmyYErOUqhyrSWPFnHhXBsN2vVqBc_Jvnl-IhVxn7_PICMcr9Nc2hseRvTscOEYlxfDPOHStARcvQQe1c_rbIMJWgMt23yZdTe__BcR00J_cCnhpZqtDnlMX5oHnB-R_84uLinGgB_rcplsXra-b7Tx1Bt6eS8WigjcWk_Nue_R3myF5OMZcmVlSbYbwsKdV-OmW9"/>
+<div class="absolute bottom-4 left-4">
+<span class="bg-tertiary text-on-tertiary px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg">Open Now</span>
+</div>
+</div>
+<div class="w-full md:w-1/2 space-y-4">
+<h2 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-on-surface">Nexus Innovation Center</h2>
+<div class="flex items-center gap-2 text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-tertiary">location_on</span>
+<span>North Campus • Zone 4</span>
+</div>
+<p class="text-on-surface-variant leading-relaxed">
+                    A state-of-the-art facility housing the Faculty of Engineering and the Design Lab. Known for its sustainable architecture and open-concept study hubs.
+                </p>
+</div>
+</section>
+<!-- Floor Navigation (Clay Button Group) -->
+<section class="space-y-4">
+<h3 class="font-headline font-bold text-primary tracking-tight px-2">Explore Floors</h3>
+<div class="clay-sunken p-2 rounded-full flex justify-between gap-2 overflow-x-auto no-scrollbar">
+<button class="flex-1 py-4 px-6 rounded-full clay-card font-bold text-on-surface active:scale-95 transition-all min-w-[80px]">G</button>
+<button class="flex-1 py-4 px-6 rounded-full clay-button-active text-white font-bold active:scale-95 transition-all min-w-[80px]">1</button>
+<button class="flex-1 py-4 px-6 rounded-full clay-card font-bold text-on-surface active:scale-95 transition-all min-w-[80px]">2</button>
+<button class="flex-1 py-4 px-6 rounded-full clay-card font-bold text-on-surface active:scale-95 transition-all min-w-[80px]">3</button>
+<button class="flex-1 py-4 px-6 rounded-full clay-card font-bold text-on-surface active:scale-95 transition-all min-w-[80px]">4</button>
+</div>
+</section>
+<!-- Bento Grid Information -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Quick Stats -->
+<div class="md:col-span-2 clay-card p-6 rounded-lg space-y-6">
+<div class="flex justify-between items-center">
+<h3 class="font-bold text-xl text-on-surface">Current Occupancy</h3>
+<span class="material-symbols-outlined text-primary">groups</span>
+</div>
+<div class="flex items-end gap-4">
+<span class="text-6xl font-extrabold tracking-tighter text-tertiary">42%</span>
+<div class="mb-2 space-y-1 flex-1">
+<div class="h-3 w-full clay-sunken rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[42%] rounded-full"></div>
+</div>
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-wide">Quiet environment</p>
+</div>
+</div>
+</div>
+<!-- Facilities Mini Card -->
+<div class="clay-card p-6 rounded-lg bg-tertiary-container/30">
+<h3 class="font-bold text-xl text-on-surface mb-4">Facilities</h3>
+<ul class="space-y-3">
+<li class="flex items-center gap-3 text-sm font-semibold text-on-tertiary-container">
+<span class="material-symbols-outlined text-lg">wifi</span> High Speed Web
+                    </li>
+<li class="flex items-center gap-3 text-sm font-semibold text-on-tertiary-container">
+<span class="material-symbols-outlined text-lg">coffee</span> Artisan Café
+                    </li>
+<li class="flex items-center gap-3 text-sm font-semibold text-on-tertiary-container">
+<span class="material-symbols-outlined text-lg">print</span> 3D Lab
+                    </li>
+</ul>
+</div>
+<!-- Overview Section -->
+<div class="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="clay-card p-8 rounded-lg space-y-4">
+<div class="w-12 h-12 clay-sunken rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">info</span>
+</div>
+<h4 class="font-bold text-2xl">Building Overview</h4>
+<p class="text-on-surface-variant leading-relaxed">
+                        The Nexus Center was completed in 2022 and serves as a beacon of modern educational architecture. It spans over 45,000 square feet with a focus on cross-disciplinary collaboration.
+                    </p>
+<div class="pt-4 flex gap-2">
+<span class="bg-primary-container px-3 py-1 rounded-full text-[10px] font-bold text-on-primary-container uppercase tracking-widest">LEED Gold</span>
+<span class="bg-primary-container px-3 py-1 rounded-full text-[10px] font-bold text-on-primary-container uppercase tracking-widest">Accessibility A+</span>
+</div>
+</div>
+<div class="clay-card p-0 rounded-lg overflow-hidden relative min-h-[300px]">
+<img class="w-full h-full object-cover" data-alt="Interior of a modern library with wooden slats on the ceiling, soft natural light, and clean white minimalist furniture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1f3Oj5go2ecbiCoD8DdB1xZD5oY66X_WSvMdp34DPKaVEjKjWn8y921iu4lIlHgjX0NjAwLK6bDkayT2NMP15ee-C0bZL4IAkAwveDs2mzFgTGlp-uulf_MIfXP4f1fZZ3Yr8f4s2uJc7ZDOO6NRc7I3I1J6h6XEnqFnrCOJpTiygHVMLOKOqZ-nyaF2_tXg-oYB18YHjBYfpPQt5Yxd8a0Pg4tK5NSHR-nI-HqyL_7aqm-Fx1DFHyrOGdVHmJfmtv5M_8I_6WemC"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-8">
+<p class="text-white font-bold text-xl">Quiet Study Zone</p>
+<p class="text-white/80 text-sm">Floor 3 • West Wing</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Campus Map Quick Action -->
+<section class="clay-card p-4 rounded-xl flex items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 clay-sunken rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">directions</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Ready to go?</h4>
+<p class="text-xs text-on-surface-variant">Estimated walk: 4 mins from current spot</p>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-8 py-4 rounded-full font-bold shadow-lg active:scale-95 transition-all">
+                Start Route
+            </button>
+</section>
+</main>
+<!-- Navigation Shell (BottomNavBar) -->
+<nav class="fixed bottom-0 w-full z-50 px-8 pb-8 flex justify-around items-center bg-[#ffffff]/80 backdrop-blur-2xl">
+<div class="fixed bottom-6 left-6 right-6 flex justify-around items-center h-20 clay-card rounded-full px-4">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-[#586062] opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label text-[11px] font-semibold uppercase tracking-wider mt-1">Home</span>
+</a>
+<!-- Map (Active) -->
+<a class="flex flex-col items-center justify-center bg-[#006c56] text-white rounded-full w-14 h-14 shadow-lg active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">map</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-[#586062] opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label text-[11px] font-semibold uppercase tracking-wider mt-1">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

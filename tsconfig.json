@@ -4,7 +4,9 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
@@ -15,15 +17,24 @@
     "skipLibCheck": true,
     "ignoreDeprecations": "5.0",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
-    "types": ["react", "react-native", "node", "vitest/globals"]
+    "types": [
+      "react",
+      "react-native",
+      "node",
+      "vitest/globals"
+    ]
   },
   "include": [
     "app",
     "src",
     "expo-env.d.ts",
     "vitest.config.ts",
-    "tests"
-  ]
+    "tests",
+    ".expo/types/**/*.ts"
+  ],
+  "extends": "expo/tsconfig.base"
 }

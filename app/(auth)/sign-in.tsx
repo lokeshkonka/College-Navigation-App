@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ClayCard } from '@/components/ui/ClayCard';
 import { ClaySunkenInput } from '@/components/ui/ClaySunkenInput';
-import { signIn } from '@/features/auth/api/authApi';
+import { resendConfirmationEmail, signIn } from '@/features/auth/api/authApi';
 import { theme } from '@/lib/constants/theme';
 
 export default function SignInScreen() {
@@ -12,6 +12,9 @@ export default function SignInScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [info, setInfo] = useState('');
+  const [emailNotConfirmed, setEmailNotConfirmed] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
   const canSubmit = email.trim().length > 0 && password.length > 0 && !loading;
 
   const onSubmit = async () => {
@@ -22,13 +25,41 @@ export default function SignInScreen() {
 
     setLoading(true);
     setError('');
+    setInfo('');
+    setEmailNotConfirmed(false);
     try {
       await signIn(email.trim(), password);
       router.replace('/(tabs)/home');
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : 'Could not sign in.');
+      const message = submitError instanceof Error ? submitError.message : 'Could not sign in.';
+      const normalizedMessage = message.toLowerCase();
+      if (normalizedMessage.includes('email not confirmed') || normalizedMessage.includes('email_not_confirmed')) {
+        setEmailNotConfirmed(true);
+        setError('Your email is not confirmed yet. Check your inbox and verify your account first.');
+      } else {
+        setError(message);
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const onResendConfirmation = async () => {
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail) {
+      setError('Enter your email first, then tap resend confirmation.');
+      return;
+    }
+
+    setResendLoading(true);
+    setInfo('');
+    try {
+      await resendConfirmationEmail(trimmedEmail);
+      setInfo('Confirmation email sent. Please check your inbox (and spam folder).');
+    } catch (resendError) {
+      setError(resendError instanceof Error ? resendError.message : 'Could not resend confirmation email.');
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -57,6 +88,13 @@ export default function SignInScreen() {
         />
 
         {error.length > 0 ? <Text style={styles.error}>{error}</Text> : null}
+        {info.length > 0 ? <Text style={styles.info}>{info}</Text> : null}
+
+        {emailNotConfirmed ? (
+          <Pressable disabled={resendLoading} onPress={onResendConfirmation} style={[styles.secondaryButton, resendLoading && styles.primaryButtonDisabled]}>
+            <Text style={styles.secondaryButtonText}>{resendLoading ? 'Sending confirmation...' : 'Resend Confirmation Email'}</Text>
+          </Pressable>
+        ) : null}
 
         <Pressable disabled={!canSubmit} onPress={onSubmit} style={[styles.primaryButton, !canSubmit && styles.primaryButtonDisabled]}>
           <Text style={styles.primaryButtonText}>{loading ? 'Signing in...' : 'Sign In'}</Text>
@@ -96,6 +134,23 @@ const styles = StyleSheet.create({
   error: {
     color: theme.colors.danger,
     marginTop: theme.spacing.md
+  },
+  info: {
+    color: theme.colors.tertiary,
+    marginTop: theme.spacing.sm
+  },
+  secondaryButton: {
+    alignItems: 'center',
+    borderColor: theme.colors.tertiary,
+    borderRadius: theme.radii.pill,
+    borderWidth: 1,
+    marginTop: theme.spacing.md,
+    paddingVertical: theme.spacing.md
+  },
+  secondaryButtonText: {
+    color: theme.colors.tertiary,
+    fontSize: 14,
+    fontWeight: '700'
   },
   primaryButton: {
     alignItems: 'center',

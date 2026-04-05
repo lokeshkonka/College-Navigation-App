@@ -13,12 +13,20 @@ export default function SignUpScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [info, setInfo] = useState('');
 
   const onSubmit = async () => {
     setLoading(true);
     setError('');
+    setInfo('');
     try {
-      await signUp(email.trim(), password, fullName.trim());
+      const result = await signUp(email.trim(), password, fullName.trim());
+      if (result.needsEmailConfirmation) {
+        setInfo('Account created. Please confirm your email, then sign in.');
+        router.replace('/(auth)/sign-in');
+        return;
+      }
+
       router.replace('/(tabs)/home');
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Could not sign up.');
@@ -59,6 +67,7 @@ export default function SignUpScreen() {
         />
 
         {error.length > 0 ? <Text style={styles.error}>{error}</Text> : null}
+        {info.length > 0 ? <Text style={styles.info}>{info}</Text> : null}
 
         <Pressable onPress={onSubmit} style={styles.primaryButton}>
           <Text style={styles.primaryButtonText}>{loading ? 'Creating account...' : 'Create Account'}</Text>
@@ -98,6 +107,10 @@ const styles = StyleSheet.create({
   error: {
     color: theme.colors.danger,
     marginTop: theme.spacing.md
+  },
+  info: {
+    color: theme.colors.tertiary,
+    marginTop: theme.spacing.sm
   },
   primaryButton: {
     alignItems: 'center',
