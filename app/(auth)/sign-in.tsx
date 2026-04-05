@@ -12,8 +12,14 @@ export default function SignInScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const canSubmit = email.trim().length > 0 && password.length > 0 && !loading;
 
   const onSubmit = async () => {
+    if (!email.trim() || !password) {
+      setError('Email and password are required.');
+      return;
+    }
+
     setLoading(true);
     setError('');
     try {
@@ -52,7 +58,7 @@ export default function SignInScreen() {
 
         {error.length > 0 ? <Text style={styles.error}>{error}</Text> : null}
 
-        <Pressable onPress={onSubmit} style={styles.primaryButton}>
+        <Pressable disabled={!canSubmit} onPress={onSubmit} style={[styles.primaryButton, !canSubmit && styles.primaryButtonDisabled]}>
           <Text style={styles.primaryButtonText}>{loading ? 'Signing in...' : 'Sign In'}</Text>
         </Pressable>
 
@@ -97,6 +103,9 @@ const styles = StyleSheet.create({
     borderRadius: theme.radii.pill,
     marginTop: theme.spacing.lg,
     paddingVertical: theme.spacing.md
+  },
+  primaryButtonDisabled: {
+    opacity: 0.55
   },
   primaryButtonText: {
     color: '#ffffff',
