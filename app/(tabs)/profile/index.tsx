@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 
 import { Button } from '@/components/ui/Button';
-import { Chip } from '@/components/ui/Chip';
 import { ClayCard } from '@/components/ui/ClayCard';
 import { FloatingHeader } from '@/components/ui/FloatingHeader';
 import { signOut } from '@/features/auth/api/authApi';
@@ -20,7 +19,7 @@ import {
 
 export default function ProfileScreen() {
   const queryClient = useQueryClient();
-  const [notificationPermission, setNotificationPermission] = useState<AppNotificationPermission>('undetermined');
+  const [_notificationPermission, setNotificationPermission] = useState<AppNotificationPermission>('undetermined');
 
   useEffect(() => {
     getNotificationPermissionStatus()
@@ -55,7 +54,7 @@ export default function ProfileScreen() {
     mutation.mutate({ [key]: value });
   };
 
-  const toggleNotifications = async (next: boolean) => {
+  const _toggleNotifications = async (next: boolean) => {
     if (!next) {
       toggle('notificationsEnabled', false);
       return;

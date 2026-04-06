@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import type { ComponentProps } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { theme } from '@/lib/constants/theme';
 
@@ -13,7 +13,7 @@ interface IconProps {
   size?: IconSize;
   color?: IconColor | string;
   filled?: boolean;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }
 
 const sizeMap = {
@@ -28,7 +28,7 @@ export function Icon({
   name,
   size = 'md',
   color = 'primary',
-  filled = false,
+  filled: _filled = false,
   style
 }: IconProps) {
   const iconSize = sizeMap[size];

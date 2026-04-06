@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import type { ComponentProps } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, View, ViewStyle, TextStyle } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View, type ViewStyle, type TextStyle, type StyleProp } from 'react-native';
 
 import { clayShadow, theme } from '@/lib/constants/theme';
 
@@ -17,7 +17,7 @@ interface ButtonProps {
   icon?: ComponentProps<typeof MaterialIcons>['name'];
   iconPosition?: 'left' | 'right';
   fullWidth?: boolean;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }
 
 export function Button({

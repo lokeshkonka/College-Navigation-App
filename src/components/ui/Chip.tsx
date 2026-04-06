@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import type { ComponentProps } from 'react';
-import { Pressable, StyleSheet, Text, View, ViewStyle, TextStyle } from 'react-native';
+import { Pressable, StyleSheet, Text, View, type ViewStyle, type TextStyle, type StyleProp } from 'react-native';
 
 import { theme } from '@/lib/constants/theme';
 
@@ -14,7 +14,7 @@ interface ChipProps {
   icon?: ComponentProps<typeof MaterialIcons>['name'];
   onPress?: () => void;
   onClose?: () => void;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }
 
 export function Chip({
@@ -83,9 +83,8 @@ export function Chip({
 
   return (
     <Container
-      // @ts-ignore - Pressable prop only applies when Container is Pressable
       onPress={onPress}
-      style={({ pressed }: any) => [
+      style={({ pressed }: { pressed?: boolean }) => [
         ...getChipStyle(),
         pressed && onPress ? styles.pressed : undefined,
         style

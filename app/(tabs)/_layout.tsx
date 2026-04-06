@@ -1,4 +1,3 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { Tabs, usePathname } from 'expo-router';
 import { router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';

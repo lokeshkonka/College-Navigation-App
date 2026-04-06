@@ -21,9 +21,8 @@ export function ClayCard({ children, style, onPress, variant = 'elevated' }: Cla
 
   return (
     <Container
-      // @ts-ignore - onPress only applies when Container is Pressable
       onPress={onPress}
-      style={({ pressed }: any) => [
+      style={({ pressed }: { pressed?: boolean }) => [
         styles.card,
         variant === 'elevated' && clayShadow,
         getVariantStyle(),

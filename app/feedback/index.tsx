@@ -92,7 +92,7 @@ export default function FeedbackScreen() {
                   ]}
                 >
                   <MaterialIcons
-                    name={option.icon as any}
+                    name={option.icon as unknown as keyof typeof MaterialIcons.glyphMap}
                     size={24}
                     color={selected ? theme.colors.onTertiary : theme.colors.primary}
                   />

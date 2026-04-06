@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import type { ComponentProps } from 'react';
-import { StyleSheet, Text, TextInput as RNTextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput as RNTextInput, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { claySunkenShadow, theme } from '@/lib/constants/theme';
 
@@ -20,7 +20,7 @@ interface TextInputProps {
   rightIcon?: ComponentProps<typeof MaterialIcons>['name'];
   onRightIconPress?: () => void;
   accessibilityLabel?: string;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }
 
 export function TextInput({
