@@ -1,7 +1,12 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { Button } from '@/components/ui/Button';
+import { Chip } from '@/components/ui/Chip';
+import { ClayCard } from '@/components/ui/ClayCard';
+import { FloatingHeader } from '@/components/ui/FloatingHeader';
 import { RouteStepCard } from '@/components/ui/RouteStepCard';
 import { getBestRoute } from '@/features/routes/api/getBestRoute';
 import { MOCK_BUILDINGS } from '@/lib/constants/mockData';
@@ -27,108 +32,206 @@ export default function RouteScreen() {
 
   if (isPending) {
     return (
-      <View style={styles.stateRoot}>
-        <Text style={styles.stateText}>Calculating best route...</Text>
+      <View style={styles.root}>
+        <FloatingHeader title="Route" showBack />
+        <View style={styles.stateContainer}>
+          <MaterialIcons name="directions" size={48} color={theme.colors.outlineVariant} />
+          <Text style={styles.stateText}>Calculating best route...</Text>
+        </View>
       </View>
     );
   }
 
   if (isError || !data) {
     return (
-      <View style={styles.stateRoot}>
-        <Text style={styles.stateText}>Could not compute route right now.</Text>
+      <View style={styles.root}>
+        <FloatingHeader title="Route" showBack />
+        <View style={styles.stateContainer}>
+          <MaterialIcons name="error-outline" size={48} color={theme.colors.error} />
+          <Text style={styles.stateText}>Could not compute route right now.</Text>
+          <Button
+            onPress={() => router.back()}
+            variant="secondary"
+            size="medium"
+            style={styles.backButton}
+          >
+            Go Back
+          </Button>
+        </View>
       </View>
     );
   }
 
   return (
     <View style={styles.root}>
-      <Text style={styles.title}>Route</Text>
-      <Text style={styles.stats}>
-        {data.duration_min} min • {data.distance_m} m • {data.is_accessible ? 'Accessible' : 'Standard'}
-      </Text>
+      <FloatingHeader title="Route" showBack />
 
-      <FlatList
-        contentContainerStyle={styles.listContent}
-        data={data.steps}
-        keyExtractor={(item, index) => `${item.instruction}-${index}`}
-        renderItem={({ item, index }) => <RouteStepCard index={index} step={item} />}
-      />
-
-      <Pressable
-        onPress={() => router.push({ pathname: '/feedback', params: { building_id: destinationId } })}
-        style={styles.feedbackButton}
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.feedbackButtonText}>Report Route Feedback</Text>
-      </Pressable>
+        {/* Route Summary Card */}
+        <ClayCard style={styles.summaryCard}>
+          <View style={styles.summaryHeader}>
+            <Text style={styles.summaryTitle}>Route Overview</Text>
+            <Chip
+              label={data.is_accessible ? 'Accessible' : 'Standard'}
+              variant={data.is_accessible ? 'tertiary' : 'secondary'}
+              size="small"
+            />
+          </View>
 
-      <Pressable
-        onPress={() => {
-          void scheduleRouteReminder({
-            destinationName: 'your destination',
-            minutesUntilLeave: 2
-          });
-        }}
-        style={styles.reminderButton}
-      >
-        <Text style={styles.reminderButtonText}>Set 2-Min Route Reminder</Text>
-      </Pressable>
+          <View style={styles.statsRow}>
+            <View style={styles.statItem}>
+              <MaterialIcons name="schedule" size={24} color={theme.colors.tertiary} />
+              <Text style={styles.statValue}>{data.duration_min}</Text>
+              <Text style={styles.statLabel}>minutes</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <MaterialIcons name="straighten" size={24} color={theme.colors.tertiary} />
+              <Text style={styles.statValue}>{data.distance_m}</Text>
+              <Text style={styles.statLabel}>meters</Text>
+            </View>
+          </View>
+        </ClayCard>
+
+        {/* Route Steps */}
+        <View style={styles.stepsSection}>
+          <Text style={styles.sectionTitle}>Turn-by-Turn Directions</Text>
+          <View style={styles.stepsList}>
+            {data.steps.map((step, index) => (
+              <RouteStepCard key={`${step.instruction}-${index}`} index={index} step={step} />
+            ))}
+          </View>
+        </View>
+
+        {/* Actions */}
+        <View style={styles.actionsSection}>
+          <Button
+            onPress={() => {
+              void scheduleRouteReminder({
+                destinationName: 'your destination',
+                minutesUntilLeave: 2
+              });
+            }}
+            variant="tertiary"
+            size="large"
+            icon="notifications"
+            iconPosition="left"
+            fullWidth
+            style={styles.actionButton}
+          >
+            Set Route Reminder
+          </Button>
+
+          <Button
+            onPress={() => router.push({ pathname: '/feedback', params: { building_id: destinationId } })}
+            variant="secondary"
+            size="medium"
+            icon="feedback"
+            iconPosition="left"
+            fullWidth
+          >
+            Report Route Feedback
+          </Button>
+        </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: theme.colors.background,
     flex: 1,
-    paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.section
+    backgroundColor: theme.colors.background
   },
-  title: {
-    color: theme.colors.primary,
-    fontSize: 30,
-    fontWeight: '900'
+  scrollView: {
+    flex: 1
   },
-  stats: {
-    color: theme.colors.textMuted,
-    fontSize: 14,
-    marginTop: 8
+  scrollContent: {
+    paddingTop: 110,
+    paddingHorizontal: theme.spacing.screenPadding,
+    paddingBottom: 120
   },
-  listContent: {
-    paddingBottom: theme.spacing.lg,
-    paddingTop: theme.spacing.lg
-  },
-  feedbackButton: {
-    alignItems: 'center',
-    backgroundColor: theme.colors.surfaceSunken,
-    borderRadius: theme.radii.pill,
-    marginBottom: theme.spacing.section,
-    paddingVertical: theme.spacing.md
-  },
-  feedbackButtonText: {
-    color: theme.colors.primary,
-    fontWeight: '800'
-  },
-  reminderButton: {
-    alignItems: 'center',
-    backgroundColor: '#d1fadf',
-    borderRadius: theme.radii.pill,
-    marginBottom: theme.spacing.section,
-    marginTop: 10,
-    paddingVertical: theme.spacing.md
-  },
-  reminderButtonText: {
-    color: theme.colors.tertiary,
-    fontWeight: '800'
-  },
-  stateRoot: {
-    alignItems: 'center',
-    backgroundColor: theme.colors.background,
+  stateContainer: {
     flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
-    padding: theme.spacing.section
+    paddingHorizontal: theme.spacing.screenPadding
   },
   stateText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: theme.colors.onSurfaceVariant,
+    marginTop: theme.spacing.xl,
+    textAlign: 'center'
+  },
+  backButton: {
+    marginTop: theme.spacing.xl
+  },
+  summaryCard: {
+    marginBottom: theme.spacing['4xl']
+  },
+  summaryHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.xl
+  },
+  summaryTitle: {
+    fontSize: 18,
+    fontWeight: '700',
     color: theme.colors.primary
+  },
+  statsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around'
+  },
+  statItem: {
+    alignItems: 'center',
+    flex: 1
+  },
+  statDivider: {
+    width: 1,
+    height: 60,
+    backgroundColor: theme.colors.outlineVariant,
+    opacity: 0.3
+  },
+  statValue: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: theme.colors.primary,
+    marginTop: theme.spacing.sm
+  },
+  statLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.onSurfaceVariant,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5
+  },
+  stepsSection: {
+    marginBottom: theme.spacing['4xl']
+  },
+  sectionTitle: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: theme.colors.outline,
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
+    marginBottom: theme.spacing.xl
+  },
+  stepsList: {
+    gap: theme.spacing.md
+  },
+  actionsSection: {
+    gap: theme.spacing.lg,
+    marginBottom: theme.spacing['4xl']
+  },
+  actionButton: {
+    marginBottom: theme.spacing.sm
   }
 });

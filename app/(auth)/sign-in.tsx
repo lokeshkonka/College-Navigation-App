@@ -1,9 +1,10 @@
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { Button } from '@/components/ui/Button';
 import { ClayCard } from '@/components/ui/ClayCard';
-import { ClaySunkenInput } from '@/components/ui/ClaySunkenInput';
+import { TextInput } from '@/components/ui/TextInput';
 import { resendConfirmationEmail, signIn } from '@/features/auth/api/authApi';
 import { theme } from '@/lib/constants/theme';
 
@@ -15,6 +16,8 @@ export default function SignInScreen() {
   const [info, setInfo] = useState('');
   const [emailNotConfirmed, setEmailNotConfirmed] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const canSubmit = email.trim().length > 0 && password.length > 0 && !loading;
 
   const onSubmit = async () => {
@@ -64,112 +67,232 @@ export default function SignInScreen() {
   };
 
   return (
-    <View style={styles.root}>
-      <ClayCard style={styles.card}>
-        <Text style={styles.title}>Sign In</Text>
-        <Text style={styles.subtitle}>Continue to your campus assistant</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.root}
+    >
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.container}>
+          {/* Hero Section */}
+          <View style={styles.heroSection}>
+            <View style={styles.logoContainer}>
+              <View style={styles.logoPlaceholder}>
+                <Text style={styles.logoIcon}>🧭</Text>
+              </View>
+            </View>
+            <Text style={styles.heroTitle}>Welcome Back</Text>
+            <Text style={styles.heroSubtitle}>
+              Sign in to continue your campus navigation
+            </Text>
+          </View>
 
-        <ClaySunkenInput
-          accessibilityLabel="Email"
-          autoCapitalize="none"
-          keyboardType="email-address"
-          onChangeText={setEmail}
-          placeholder="Email"
-          style={styles.input}
-          value={email}
-        />
-        <ClaySunkenInput
-          accessibilityLabel="Password"
-          onChangeText={setPassword}
-          placeholder="Password"
-          secureTextEntry
-          style={styles.input}
-          value={password}
-        />
+          {/* Form Card */}
+          <ClayCard style={styles.formCard}>
+            <TextInput
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Email"
+              label="Email Address"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              leftIcon="email"
+              accessibilityLabel="Email"
+              style={styles.input}
+            />
 
-        {error.length > 0 ? <Text style={styles.error}>{error}</Text> : null}
-        {info.length > 0 ? <Text style={styles.info}>{info}</Text> : null}
+            <TextInput
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Password"
+              label="Password"
+              secureTextEntry={!showPassword}
+              leftIcon="lock"
+              rightIcon={showPassword ? 'visibility' : 'visibility-off'}
+              onRightIconPress={() => setShowPassword(!showPassword)}
+              accessibilityLabel="Password"
+              style={styles.input}
+            />
 
-        {emailNotConfirmed ? (
-          <Pressable disabled={resendLoading} onPress={onResendConfirmation} style={[styles.secondaryButton, resendLoading && styles.primaryButtonDisabled]}>
-            <Text style={styles.secondaryButtonText}>{resendLoading ? 'Sending confirmation...' : 'Resend Confirmation Email'}</Text>
-          </Pressable>
-        ) : null}
+            {error.length > 0 && (
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{error}</Text>
+              </View>
+            )}
 
-        <Pressable disabled={!canSubmit} onPress={onSubmit} style={[styles.primaryButton, !canSubmit && styles.primaryButtonDisabled]}>
-          <Text style={styles.primaryButtonText}>{loading ? 'Signing in...' : 'Sign In'}</Text>
-        </Pressable>
+            {info.length > 0 && (
+              <View style={styles.infoContainer}>
+                <Text style={styles.infoText}>{info}</Text>
+              </View>
+            )}
 
-        <Link href="/(auth)/sign-up" style={styles.link}>
-          Create a new account
-        </Link>
-      </ClayCard>
-    </View>
+            {emailNotConfirmed && (
+              <Button
+                onPress={onResendConfirmation}
+                variant="secondary"
+                size="medium"
+                disabled={resendLoading}
+                loading={resendLoading}
+                fullWidth
+                style={styles.button}
+              >
+                {resendLoading ? 'Sending...' : 'Resend Confirmation Email'}
+              </Button>
+            )}
+
+            <Button
+              onPress={onSubmit}
+              variant="primary"
+              size="large"
+              disabled={!canSubmit}
+              loading={loading}
+              icon="arrow-forward"
+              iconPosition="right"
+              fullWidth
+              style={styles.primaryButton}
+            >
+              {loading ? 'Signing in...' : 'Sign In'}
+            </Button>
+
+            <View style={styles.divider}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>or</Text>
+              <View style={styles.dividerLine} />
+            </View>
+
+            <Link href="/(auth)/sign-up" asChild>
+              <Button
+                onPress={() => {}}
+                variant="ghost"
+                size="medium"
+                fullWidth
+              >
+                Create a new account
+              </Button>
+            </Link>
+          </ClayCard>
+
+          {/* Footer */}
+          <Text style={styles.footerText}>
+            By signing in, you agree to our Terms of Service and Privacy Policy
+          </Text>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   root: {
-    alignItems: 'center',
-    backgroundColor: theme.colors.background,
     flex: 1,
-    justifyContent: 'center',
-    padding: theme.spacing.section
+    backgroundColor: theme.colors.background
   },
-  card: {
-    width: '100%'
+  scrollContent: {
+    flexGrow: 1
   },
-  title: {
+  container: {
+    flex: 1,
+    paddingHorizontal: theme.spacing.screenPadding,
+    paddingTop: theme.spacing['6xl'],
+    paddingBottom: theme.spacing['3xl']
+  },
+  heroSection: {
+    alignItems: 'center',
+    marginBottom: theme.spacing['4xl']
+  },
+  logoContainer: {
+    marginBottom: theme.spacing['2xl']
+  },
+  logoPlaceholder: {
+    width: 80,
+    height: 80,
+    borderRadius: theme.radii.xl,
+    backgroundColor: theme.colors.tertiaryContainer,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  logoIcon: {
+    fontSize: 40
+  },
+  heroTitle: {
+    fontSize: 32,
+    fontWeight: '800',
     color: theme.colors.primary,
-    fontSize: 28,
-    fontWeight: '900'
+    marginBottom: theme.spacing.sm,
+    letterSpacing: -1
   },
-  subtitle: {
-    color: theme.colors.textMuted,
-    marginTop: 6
+  heroSubtitle: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: theme.colors.onSurfaceVariant,
+    textAlign: 'center',
+    lineHeight: 22,
+    paddingHorizontal: theme.spacing.xl
+  },
+  formCard: {
+    marginBottom: theme.spacing.xl
   },
   input: {
-    marginTop: theme.spacing.md
+    marginBottom: theme.spacing.lg
   },
-  error: {
-    color: theme.colors.danger,
-    marginTop: theme.spacing.md
+  errorContainer: {
+    backgroundColor: theme.colors.errorContainer,
+    borderRadius: theme.radii.md,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.lg
   },
-  info: {
-    color: theme.colors.tertiary,
-    marginTop: theme.spacing.sm
+  errorText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: theme.colors.onErrorContainer,
+    lineHeight: 18
   },
-  secondaryButton: {
-    alignItems: 'center',
-    borderColor: theme.colors.tertiary,
-    borderRadius: theme.radii.pill,
-    borderWidth: 1,
-    marginTop: theme.spacing.md,
-    paddingVertical: theme.spacing.md
+  infoContainer: {
+    backgroundColor: theme.colors.tertiaryContainer,
+    borderRadius: theme.radii.md,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.lg
   },
-  secondaryButtonText: {
-    color: theme.colors.tertiary,
-    fontSize: 14,
-    fontWeight: '700'
+  infoText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: theme.colors.onTertiaryContainer,
+    lineHeight: 18
+  },
+  button: {
+    marginBottom: theme.spacing.md
   },
   primaryButton: {
+    marginTop: theme.spacing.lg
+  },
+  divider: {
+    flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.primary,
-    borderRadius: theme.radii.pill,
-    marginTop: theme.spacing.lg,
-    paddingVertical: theme.spacing.md
+    marginVertical: theme.spacing.xl
   },
-  primaryButtonDisabled: {
-    opacity: 0.55
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: theme.colors.outlineVariant,
+    opacity: 0.3
   },
-  primaryButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '800'
+  dividerText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.outline,
+    marginHorizontal: theme.spacing.md,
+    textTransform: 'uppercase',
+    letterSpacing: 1
   },
-  link: {
-    color: theme.colors.tertiary,
-    marginTop: theme.spacing.lg,
-    textAlign: 'center'
+  footerText: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: theme.colors.outlineVariant,
+    textAlign: 'center',
+    lineHeight: 16,
+    paddingHorizontal: theme.spacing.xl
   }
 });

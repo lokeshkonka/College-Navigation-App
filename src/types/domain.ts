@@ -9,6 +9,7 @@ export type Building = {
   longitude: number;
   tags: string[];
   is_active: boolean;
+  distance?: number; // Optional distance for search results
 };
 
 export type BuildingDetails = Building & {

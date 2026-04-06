@@ -1,9 +1,12 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Switch, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 
+import { Button } from '@/components/ui/Button';
 import { ClayCard } from '@/components/ui/ClayCard';
+import { FloatingHeader } from '@/components/ui/FloatingHeader';
 import { signOut } from '@/features/auth/api/authApi';
 import { getProfile, updateProfilePrefs } from '@/features/profile/api/profileApi';
 import { isAdminRole } from '@/lib/auth';
@@ -16,7 +19,7 @@ import {
 
 export default function ProfileScreen() {
   const queryClient = useQueryClient();
-  const [notificationPermission, setNotificationPermission] = useState<AppNotificationPermission>('undetermined');
+  const [_notificationPermission, setNotificationPermission] = useState<AppNotificationPermission>('undetermined');
 
   useEffect(() => {
     getNotificationPermissionStatus()
@@ -24,7 +27,7 @@ export default function ProfileScreen() {
       .catch(() => setNotificationPermission('undetermined'));
   }, []);
 
-  const { data } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ['profile'],
     queryFn: getProfile,
     staleTime: 2 * 60_000
@@ -51,7 +54,7 @@ export default function ProfileScreen() {
     mutation.mutate({ [key]: value });
   };
 
-  const toggleNotifications = async (next: boolean) => {
+  const _toggleNotifications = async (next: boolean) => {
     if (!next) {
       toggle('notificationsEnabled', false);
       return;
@@ -62,149 +65,418 @@ export default function ProfileScreen() {
     toggle('notificationsEnabled', granted);
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    router.replace('/(auth)/sign-in');
+  };
+
+  if (isPending) {
+    return (
+      <View style={styles.root}>
+        <FloatingHeader title="Tactile Cartographer" showMenu={false} showProfile={false} />
+        <View style={styles.stateContainer}>
+          <Text style={styles.stateText}>Loading profile...</Text>
+        </View>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View style={styles.root}>
+        <FloatingHeader title="Tactile Cartographer" showMenu={false} showProfile={false} />
+        <View style={styles.stateContainer}>
+          <Text style={styles.stateText}>Unable to load profile</Text>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.root}>
-      <Text style={styles.title}>Profile Settings</Text>
-      <ClayCard>
-        <Text style={styles.name}>{data?.full_name ?? 'Campus User'}</Text>
-        <Text style={styles.role}>{data?.role ?? 'student'}</Text>
-      </ClayCard>
+      <FloatingHeader title="Tactile Cartographer" showMenu={false} showProfile={false} />
 
-      <ClayCard style={styles.prefsCard}>
-        <PreferenceRow
-          label="High Contrast"
-          value={Boolean(prefs.highContrast)}
-          onValueChange={(next) => toggle('highContrast', next)}
-        />
-        <PreferenceRow
-          label="Larger Text"
-          value={Boolean(prefs.largerText)}
-          onValueChange={(next) => toggle('largerText', next)}
-        />
-        <PreferenceRow
-          label="Notifications"
-          value={Boolean(prefs.notificationsEnabled)}
-          onValueChange={(next) => {
-            void toggleNotifications(next);
-          }}
-        />
-        <Text style={styles.permissionText}>Notification permission: {notificationPermission}</Text>
-      </ClayCard>
-
-      <Pressable onPress={() => router.push('/feedback')} style={styles.secondaryButton}>
-        <Text style={styles.secondaryButtonText}>Send Feedback</Text>
-      </Pressable>
-
-      {data && isAdminRole(data.role) ? (
-        <Pressable onPress={() => router.push('/admin')} style={styles.adminButton}>
-          <Text style={styles.adminButtonText}>Open Admin Console</Text>
-        </Pressable>
-      ) : null}
-
-      <Pressable
-        onPress={async () => {
-          await signOut();
-          router.replace('/(auth)/sign-in');
-        }}
-        style={styles.signOutButton}
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.signOutButtonText}>Sign Out</Text>
-      </Pressable>
-    </View>
-  );
-}
+        {/* User Profile Card */}
+        <ClayCard style={styles.profileCard}>
+          <View style={styles.profileHeader}>
+            <View style={styles.avatarContainer}>
+              <MaterialIcons name="person" size={48} color={theme.colors.primary} />
+              <View style={styles.statusBadge}>
+                <MaterialIcons name="check" size={12} color="#ffffff" />
+              </View>
+            </View>
+            <View style={styles.profileInfo}>
+              <Text style={styles.name}>{data?.full_name ?? 'Campus User'}</Text>
+              <Text style={styles.role}>{data?.role ?? 'student'}</Text>
+            </View>
+          </View>
+        </ClayCard>
 
-function PreferenceRow({
-  label,
-  value,
-  onValueChange
-}: {
-  label: string;
-  value: boolean;
-  onValueChange: (next: boolean) => void;
-}) {
-  return (
-    <View style={styles.prefRow}>
-      <Text style={styles.prefLabel}>{label}</Text>
-      <Switch onValueChange={onValueChange} value={value} />
+        {/* Dark Mode Toggle */}
+        <ClayCard style={styles.settingCard}>
+          <View style={styles.settingRow}>
+            <View style={styles.settingIcon}>
+              <MaterialIcons name="dark-mode" size={24} color={theme.colors.primary} />
+            </View>
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Dark Mode</Text>
+              <Text style={styles.settingDescription}>
+                Switch to a darker interface for low-light campus walking.
+              </Text>
+            </View>
+            <Switch
+              onValueChange={() => {}}
+              value={false}
+              trackColor={{ false: theme.colors.surfaceContainerHigh, true: theme.colors.tertiary }}
+              thumbColor="#ffffff"
+            />
+          </View>
+        </ClayCard>
+
+        {/* Accessibility Toggle */}
+        <ClayCard style={styles.settingCard}>
+          <View style={styles.settingRow}>
+            <View style={styles.settingIcon}>
+              <MaterialIcons name="accessibility" size={24} color={theme.colors.primary} />
+            </View>
+            <View style={styles.settingContent}>
+              <Text style={styles.settingTitle}>Accessibility</Text>
+              <Text style={styles.settingDescription}>
+                Enable high-contrast markers and wheelchair-accessible routing.
+              </Text>
+            </View>
+            <Switch
+              onValueChange={(next) => toggle('highContrast', next)}
+              value={Boolean(prefs.highContrast)}
+              trackColor={{ false: theme.colors.surfaceContainerHigh, true: theme.colors.tertiary }}
+              thumbColor="#ffffff"
+            />
+          </View>
+        </ClayCard>
+
+        {/* Preferences & Privacy Section */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Preferences & Privacy</Text>
+        </View>
+
+        {/* Notifications */}
+        <Pressable onPress={() => {}}>
+          <ClayCard style={styles.menuCard}>
+            <View style={styles.menuRow}>
+              <View style={styles.menuIcon}>
+                <MaterialIcons name="notifications" size={20} color={theme.colors.primary} />
+              </View>
+              <View style={styles.menuContent}>
+                <Text style={styles.menuTitle}>Notifications</Text>
+                <Text style={styles.menuSubtitle}>Arrival alerts and route changes</Text>
+              </View>
+              <MaterialIcons name="chevron-right" size={20} color={theme.colors.outlineVariant} />
+            </View>
+          </ClayCard>
+        </Pressable>
+
+        {/* Location History */}
+        <Pressable onPress={() => {}}>
+          <ClayCard style={styles.menuCard}>
+            <View style={styles.menuRow}>
+              <View style={styles.menuIcon}>
+                <MaterialIcons name="location-on" size={20} color={theme.colors.primary} />
+              </View>
+              <View style={styles.menuContent}>
+                <Text style={styles.menuTitle}>Location History</Text>
+                <Text style={styles.menuSubtitle}>Manage your saved frequent spots</Text>
+              </View>
+              <MaterialIcons name="chevron-right" size={20} color={theme.colors.outlineVariant} />
+            </View>
+          </ClayCard>
+        </Pressable>
+
+        {/* Security */}
+        <Pressable onPress={() => {}}>
+          <ClayCard style={styles.menuCard}>
+            <View style={styles.menuRow}>
+              <View style={styles.menuIcon}>
+                <MaterialIcons name="security" size={20} color={theme.colors.primary} />
+              </View>
+              <View style={styles.menuContent}>
+                <Text style={styles.menuTitle}>Security</Text>
+                <Text style={styles.menuSubtitle}>Two-factor and login history</Text>
+              </View>
+              <MaterialIcons name="chevron-right" size={20} color={theme.colors.outlineVariant} />
+            </View>
+          </ClayCard>
+        </Pressable>
+
+        {/* Send Feedback */}
+        <ClayCard style={styles.actionCard} onPress={() => router.push('/feedback')}>
+          <View style={styles.actionContent}>
+            <View style={styles.feedbackIconContainer}>
+              <MaterialIcons name="chat" size={28} color={theme.colors.tertiary} />
+            </View>
+            <View>
+              <Text style={styles.actionTitle}>Send Feedback</Text>
+              <Text style={styles.actionSubtitle}>Help us improve the map</Text>
+            </View>
+          </View>
+        </ClayCard>
+
+        {/* Admin Console */}
+        {data && isAdminRole(data.role) && (
+          <Button
+            onPress={() => router.push('/admin')}
+            variant="tertiary"
+            icon="admin-panel-settings"
+            fullWidth
+            style={styles.adminButton}
+          >
+            Open Admin Console
+          </Button>
+        )}
+
+        {/* Sign Out */}
+        <ClayCard style={styles.signOutCard} onPress={handleSignOut}>
+          <View style={styles.actionContent}>
+            <View style={styles.signOutIconContainer}>
+              <MaterialIcons name="logout" size={28} color={theme.colors.error} />
+            </View>
+            <View>
+              <Text style={styles.signOutTitle}>Sign Out</Text>
+              <Text style={styles.signOutSubtitle}>Securely exit your session</Text>
+            </View>
+          </View>
+        </ClayCard>
+
+        {/* App Version */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>TACTILE CARTOGRAPHER V2.4.1</Text>
+          <Text style={styles.footerSubtext}>Crafted with precision for campus explorers</Text>
+        </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: theme.colors.background,
     flex: 1,
-    paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.section
+    backgroundColor: theme.colors.background
   },
-  title: {
-    color: theme.colors.primary,
-    fontSize: 30,
-    fontWeight: '900',
-    marginBottom: theme.spacing.lg
+  scrollView: {
+    flex: 1
+  },
+  scrollContent: {
+    paddingTop: 110,
+    paddingHorizontal: theme.spacing.screenPadding,
+    paddingBottom: 120
+  },
+  stateContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: theme.spacing.screenPadding
+  },
+  stateText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: theme.colors.onSurfaceVariant,
+    textAlign: 'center'
+  },
+  profileCard: {
+    marginBottom: theme.spacing['4xl']
+  },
+  profileHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.lg
+  },
+  avatarContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: theme.radii.full,
+    backgroundColor: theme.colors.primaryFixed,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    borderWidth: 3,
+    borderColor: theme.colors.surfaceContainerLowest
+  },
+  statusBadge: {
+    position: 'absolute',
+    bottom: 4,
+    right: 4,
+    width: 20,
+    height: 20,
+    borderRadius: theme.radii.full,
+    backgroundColor: theme.colors.tertiary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: theme.colors.surfaceContainerLowest
+  },
+  profileInfo: {
+    flex: 1
   },
   name: {
+    fontSize: 24,
+    fontWeight: '800',
     color: theme.colors.primary,
-    fontSize: 22,
-    fontWeight: '800'
+    marginBottom: theme.spacing.xs
   },
   role: {
-    color: theme.colors.textMuted,
-    marginTop: 4,
+    fontSize: 14,
+    fontWeight: '500',
+    color: theme.colors.onSurfaceVariant,
     textTransform: 'capitalize'
   },
-  prefsCard: {
-    marginTop: theme.spacing.lg
+  settingCard: {
+    marginBottom: theme.spacing.xl
   },
-  prefRow: {
-    alignItems: 'center',
+  settingRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: theme.spacing.md
+  },
+  settingIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: theme.radii.lg,
+    backgroundColor: theme.colors.primaryFixed,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 4
+  },
+  settingContent: {
+    flex: 1
+  },
+  settingTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: theme.colors.primary,
+    marginBottom: theme.spacing.xs
+  },
+  settingDescription: {
+    fontSize: 13,
+    fontWeight: '400',
+    color: theme.colors.onSurfaceVariant,
+    lineHeight: 18
+  },
+  sectionHeader: {
+    marginTop: theme.spacing.xl,
+    marginBottom: theme.spacing.lg
+  },
+  sectionTitle: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: theme.colors.outline,
+    textTransform: 'uppercase',
+    letterSpacing: 1.5
+  },
+  menuCard: {
     marginBottom: theme.spacing.md
   },
-  prefLabel: {
-    color: theme.colors.primary,
-    fontSize: 16,
-    fontWeight: '600'
-  },
-  permissionText: {
-    color: theme.colors.textMuted,
-    fontSize: 12,
-    marginTop: 2,
-    textTransform: 'capitalize'
-  },
-  secondaryButton: {
+  menuRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.surfaceSunken,
-    borderRadius: theme.radii.pill,
-    marginTop: theme.spacing.section,
-    paddingVertical: theme.spacing.md
+    gap: theme.spacing.md
   },
-  secondaryButtonText: {
+  menuIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: theme.radii.lg,
+    backgroundColor: theme.colors.surfaceSunken,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  menuContent: {
+    flex: 1
+  },
+  menuTitle: {
+    fontSize: 15,
+    fontWeight: '700',
     color: theme.colors.primary,
-    fontWeight: '700'
+    marginBottom: 2
+  },
+  menuSubtitle: {
+    fontSize: 12,
+    fontWeight: '400',
+    color: theme.colors.onSurfaceVariant
+  },
+  actionCard: {
+    marginTop: theme.spacing['3xl'],
+    marginBottom: theme.spacing.lg,
+    backgroundColor: theme.colors.surfaceContainerLowest
+  },
+  actionContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.lg
+  },
+  feedbackIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: theme.radii.full,
+    backgroundColor: theme.colors.tertiaryContainer,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  actionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: theme.colors.primary,
+    marginBottom: theme.spacing.xs
+  },
+  actionSubtitle: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: theme.colors.onSurfaceVariant
   },
   adminButton: {
+    marginBottom: theme.spacing.lg
+  },
+  signOutCard: {
+    backgroundColor: theme.colors.surfaceContainerLowest,
+    marginBottom: theme.spacing['4xl']
+  },
+  signOutIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: theme.radii.full,
+    backgroundColor: theme.colors.errorContainer,
     alignItems: 'center',
-    backgroundColor: '#d1fadf',
-    borderRadius: theme.radii.pill,
-    marginTop: theme.spacing.md,
-    paddingVertical: theme.spacing.md
+    justifyContent: 'center',
+    opacity: 0.9
   },
-  adminButtonText: {
-    color: theme.colors.tertiary,
-    fontWeight: '800'
+  signOutTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: theme.colors.primary,
+    marginBottom: theme.spacing.xs
   },
-  signOutButton: {
+  signOutSubtitle: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: theme.colors.onSurfaceVariant
+  },
+  footer: {
     alignItems: 'center',
-    backgroundColor: '#fee4e2',
-    borderRadius: theme.radii.pill,
-    marginTop: theme.spacing.md,
-    paddingVertical: theme.spacing.md
+    paddingVertical: theme.spacing.xl
   },
-  signOutButtonText: {
-    color: theme.colors.danger,
-    fontWeight: '800'
+  footerText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: theme.colors.outline,
+    letterSpacing: 1.5,
+    marginBottom: theme.spacing.xs
+  },
+  footerSubtext: {
+    fontSize: 11,
+    fontWeight: '400',
+    color: theme.colors.outlineVariant,
+    textAlign: 'center'
   }
 });
