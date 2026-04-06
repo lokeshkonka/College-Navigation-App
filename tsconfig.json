@@ -35,5 +35,6 @@
     "vitest.config.ts",
     "tests",
     ".expo/types/**/*.ts"
-  ]
+  ],
+  "extends": "expo/tsconfig.base"
 }
