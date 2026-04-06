@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import type { ComponentProps } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, ViewStyle, TextStyle } from 'react-native';
 
 import { theme } from '@/lib/constants/theme';
 
@@ -28,40 +28,40 @@ export function Chip({
 }: ChipProps) {
   const Container = onPress ? Pressable : View;
 
-  const getChipStyle = () => {
-    const baseStyle = [styles.base];
+  const getChipStyle = (): ViewStyle[] => {
+    const baseStyle: ViewStyle[] = [styles.base];
 
     // Size styles
-    if (size === 'small') baseStyle.push(styles.small);
-    if (size === 'medium') baseStyle.push(styles.medium);
-    if (size === 'large') baseStyle.push(styles.large);
+    if (size === 'small') baseStyle.push(styles.small as ViewStyle);
+    if (size === 'medium') baseStyle.push(styles.medium as ViewStyle);
+    if (size === 'large') baseStyle.push(styles.large as ViewStyle);
 
     // Variant styles
-    if (variant === 'primary') baseStyle.push(styles.primary);
-    if (variant === 'secondary') baseStyle.push(styles.secondary);
-    if (variant === 'tertiary') baseStyle.push(styles.tertiary);
-    if (variant === 'success') baseStyle.push(styles.success);
-    if (variant === 'warning') baseStyle.push(styles.warning);
-    if (variant === 'error') baseStyle.push(styles.error);
+    if (variant === 'primary') baseStyle.push(styles.primary as ViewStyle);
+    if (variant === 'secondary') baseStyle.push(styles.secondary as ViewStyle);
+    if (variant === 'tertiary') baseStyle.push(styles.tertiary as ViewStyle);
+    if (variant === 'success') baseStyle.push(styles.success as ViewStyle);
+    if (variant === 'warning') baseStyle.push(styles.warning as ViewStyle);
+    if (variant === 'error') baseStyle.push(styles.error as ViewStyle);
 
     return baseStyle;
   };
 
-  const getTextStyle = () => {
-    const baseStyle = [styles.text];
+  const getTextStyle = (): TextStyle[] => {
+    const baseStyle: TextStyle[] = [styles.text];
 
     // Size text styles
-    if (size === 'small') baseStyle.push(styles.textSmall);
-    if (size === 'medium') baseStyle.push(styles.textMedium);
-    if (size === 'large') baseStyle.push(styles.textLarge);
+    if (size === 'small') baseStyle.push(styles.textSmall as TextStyle);
+    if (size === 'medium') baseStyle.push(styles.textMedium as TextStyle);
+    if (size === 'large') baseStyle.push(styles.textLarge as TextStyle);
 
     // Variant text styles
-    if (variant === 'primary') baseStyle.push(styles.textPrimary);
-    if (variant === 'secondary') baseStyle.push(styles.textSecondary);
-    if (variant === 'tertiary') baseStyle.push(styles.textTertiary);
-    if (variant === 'success') baseStyle.push(styles.textSuccess);
-    if (variant === 'warning') baseStyle.push(styles.textWarning);
-    if (variant === 'error') baseStyle.push(styles.textError);
+    if (variant === 'primary') baseStyle.push(styles.textPrimary as TextStyle);
+    if (variant === 'secondary') baseStyle.push(styles.textSecondary as TextStyle);
+    if (variant === 'tertiary') baseStyle.push(styles.textTertiary as TextStyle);
+    if (variant === 'success') baseStyle.push(styles.textSuccess as TextStyle);
+    if (variant === 'warning') baseStyle.push(styles.textWarning as TextStyle);
+    if (variant === 'error') baseStyle.push(styles.textError as TextStyle);
 
     return baseStyle;
   };

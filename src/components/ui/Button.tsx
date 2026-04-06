@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import type { ComponentProps } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View, ViewStyle, TextStyle } from 'react-native';
 
 import { clayShadow, theme } from '@/lib/constants/theme';
 
@@ -34,42 +34,42 @@ export function Button({
 }: ButtonProps) {
   const isDisabled = disabled || loading;
 
-  const getButtonStyle = () => {
-    const baseStyle = [styles.base];
+  const getButtonStyle = (): ViewStyle[] => {
+    const baseStyle: ViewStyle[] = [styles.base];
 
     // Size styles
-    if (size === 'small') baseStyle.push(styles.small);
-    if (size === 'medium') baseStyle.push(styles.medium);
-    if (size === 'large') baseStyle.push(styles.large);
+    if (size === 'small') baseStyle.push(styles.small as ViewStyle);
+    if (size === 'medium') baseStyle.push(styles.medium as ViewStyle);
+    if (size === 'large') baseStyle.push(styles.large as ViewStyle);
 
     // Variant styles
-    if (variant === 'primary') baseStyle.push(styles.primary);
-    if (variant === 'secondary') baseStyle.push(styles.secondary);
-    if (variant === 'tertiary') baseStyle.push(styles.tertiary);
-    if (variant === 'ghost') baseStyle.push(styles.ghost);
-    if (variant === 'danger') baseStyle.push(styles.danger);
+    if (variant === 'primary') baseStyle.push(styles.primary as ViewStyle);
+    if (variant === 'secondary') baseStyle.push(styles.secondary as ViewStyle);
+    if (variant === 'tertiary') baseStyle.push(styles.tertiary as ViewStyle);
+    if (variant === 'ghost') baseStyle.push(styles.ghost as ViewStyle);
+    if (variant === 'danger') baseStyle.push(styles.danger as ViewStyle);
 
     // State styles
-    if (isDisabled) baseStyle.push(styles.disabled);
-    if (fullWidth) baseStyle.push(styles.fullWidth);
+    if (isDisabled) baseStyle.push(styles.disabled as ViewStyle);
+    if (fullWidth) baseStyle.push(styles.fullWidth as ViewStyle);
 
     return baseStyle;
   };
 
-  const getTextStyle = () => {
-    const baseStyle = [styles.text];
+  const getTextStyle = (): TextStyle[] => {
+    const baseStyle: TextStyle[] = [styles.text];
 
     // Size text styles
-    if (size === 'small') baseStyle.push(styles.textSmall);
-    if (size === 'medium') baseStyle.push(styles.textMedium);
-    if (size === 'large') baseStyle.push(styles.textLarge);
+    if (size === 'small') baseStyle.push(styles.textSmall as TextStyle);
+    if (size === 'medium') baseStyle.push(styles.textMedium as TextStyle);
+    if (size === 'large') baseStyle.push(styles.textLarge as TextStyle);
 
     // Variant text styles
-    if (variant === 'primary') baseStyle.push(styles.textPrimary);
-    if (variant === 'secondary') baseStyle.push(styles.textSecondary);
-    if (variant === 'tertiary') baseStyle.push(styles.textTertiary);
-    if (variant === 'ghost') baseStyle.push(styles.textGhost);
-    if (variant === 'danger') baseStyle.push(styles.textDanger);
+    if (variant === 'primary') baseStyle.push(styles.textPrimary as TextStyle);
+    if (variant === 'secondary') baseStyle.push(styles.textSecondary as TextStyle);
+    if (variant === 'tertiary') baseStyle.push(styles.textTertiary as TextStyle);
+    if (variant === 'ghost') baseStyle.push(styles.textGhost as TextStyle);
+    if (variant === 'danger') baseStyle.push(styles.textDanger as TextStyle);
 
     return baseStyle;
   };
